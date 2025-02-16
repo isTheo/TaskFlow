@@ -1,0 +1,75 @@
+/* 
+  Localizable.strings (English)
+  TaskFlow
+
+  Created by Matteo Orru on 16/02/25.
+  
+*/
+
+
+// MARK: - General
+"app.name" = "TaskFlow";
+"button.save" = "Save";
+"button.cancel" = "Cancel";
+"button.done" = "Done";
+"button.delete" = "Delete";
+
+
+// MARK: - Tab Bar
+"tab.tasks" = "Activity";
+"tab.calendar" = "Calendar";
+"tab.stats" = "Stats";
+
+
+// MARK: - Tasks
+"task.new" = "New Task";
+"task.title" = "Title";
+"task.description" = "Description";
+"task.description.placeholder" = "Description (optional)";
+"task.priority" = "Priority";
+"task.dueDate" = "Due Date";
+"task.setDueDate" = "Set Due Date";
+"task.noDueDate" = "No Due Date";
+"task.completed" = "Completed";
+"task.pending" = "Pending";
+
+// MARK: - Priority Levels
+"priority.high" = "High";
+"priority.medium" = "Medium";
+"priority.low" = "Low";
+
+// MARK: - Settings
+"settings.title" = "Settings";
+"settings.preferences" = "Task Preferences";
+"settings.defaultPriority" = "Default Priority";
+"settings.sortBy" = "Sort By";
+"settings.notifications" = "Notifications";
+"settings.enableNotifications" = "Enable Notifications";
+"settings.notifyBefore" = "Notify Before";
+"settings.appearance" = "Appearance";
+"settings.darkMode" = "Dark Mode";
+"settings.reset" = "Reset Settings";
+"settings.resetConfirm" = "Do you really want to reset all settings to default values?";
+"settings.version" = "Version";
+
+// MARK: - Sort Options
+"sort.priority" = "Priority";
+"sort.dueDate" = "Due Date";
+"sort.created" = "Creation Date";
+
+// MARK: - Notifications
+"notification.title" = "Task Due";
+"notification.before.15" = "15 minutes before";
+"notification.before.30" = "30 minutes before";
+"notification.before.60" = "1 hour before";
+"notification.before.120" = "2 hours before";
+"notification.before.1440" = "1 day before";
+
+// MARK: - Validation
+"validation.error" = "Validation Error";
+"validation.title.empty" = "Title cannot be empty";
+
+
+// Sample Data
+"task.example.title" = "Example task";
+"task.example.description" = "This is an example task for previews";

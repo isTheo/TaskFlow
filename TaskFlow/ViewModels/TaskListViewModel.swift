@@ -23,27 +23,46 @@ class TaskListViewModel: ObservableObject {
         self.viewContext = context
         loadTasks()
         NotificationManager.shared.configureNotificationCategories()
+        startObservingSettings()
     }
     
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    
     // MARK: - Core Data Operations
+    @MainActor
     func loadTasks() {
-        isLoading = true
-        
-        let request = TaskEntity.fetchRequest()
-        request.sortDescriptors = [
-            NSSortDescriptor(keyPath: \TaskEntity.priority, ascending: false),
-            NSSortDescriptor(keyPath: \TaskEntity.dueDate, ascending: true)
-        ]
-        
-        do {
-            let fetchedEntities = try viewContext.fetch(request)
-            self.tasks = fetchedEntities.map { Task(from: $0) }
-            isLoading = false
-        } catch {
-            self.error = .fetchError(error.localizedDescription)
-            isLoading = false
+        _Concurrency.Task {
+            // Impostiamo lo stato di caricamento all'interno del task asincrono
+            await MainActor.run {
+                self.isLoading = true
+            }
+            
+            let request = TaskEntity.fetchRequest()
+            request.sortDescriptors = [
+                NSSortDescriptor(keyPath: \TaskEntity.priority, ascending: false),
+                NSSortDescriptor(keyPath: \TaskEntity.dueDate, ascending: true)
+            ]
+            
+            do {
+                let fetchedEntities = try viewContext.fetch(request)
+                // Aggiorniamo i dati sul thread principale
+                await MainActor.run {
+                    self.tasks = fetchedEntities.map { Task(from: $0) }
+                    self.isLoading = false
+                }
+            } catch {
+                // Gestiamo gli errori sul thread principale
+                await MainActor.run {
+                    self.error = .fetchError(error.localizedDescription)
+                    self.isLoading = false
+                }
+            }
         }
     }
+    
     
     func addTask(_ task: Task) {
         let entity = TaskEntity(context: viewContext)
@@ -179,11 +198,37 @@ extension TaskListViewModel {
             }
         }
     }
-
+    
+    
+    private func removeNotificationsForTask(_ task: Task) {
+        NotificationManager.shared.removeNotification(for: task)
+    }
+    
+    
+    private var settings: SettingsManager {
+        SettingsManager.shared
+    }
+    
+    
+    func startObservingSettings() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(settingsChanged),
+            name: UserDefaults.didChangeNotification,
+            object: nil
+        )
+    }
+    
+    
+    @objc private func settingsChanged() {
+        loadTasks()
+    }
+    
+    
+    
+    
 }
 
 
-private func removeNotificationsForTask(_ task: Task) {
-    NotificationManager.shared.removeNotification(for: task)
-}
+
 

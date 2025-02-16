@@ -7,38 +7,44 @@
 
 import SwiftUI
 
-// AddTaskView` gestisce l'interfaccia per la creazione di nuovi task
+// AddTaskView gestisce l'interfaccia per la creazione di nuovi task
 struct AddTaskView: View {
     // Il ViewModel che gestirà il salvataggio del nuovo task
     @ObservedObject var viewModel: TaskListViewModel
-    
     @Environment(\.dismiss) private var dismiss
     
     // MARK: - Form State
+    @StateObject private var settings = SettingsManager.shared
+    
     // Stati per gestire i valori del form
     @State private var title = ""
     @State private var description = ""
-    @State private var priority = TaskPriority.medium
     @State private var dueDate = Date()
+    @State private var priority: TaskPriority
     @State private var includeDueDate = false
     
     // Stato per gestire gli errori di validazione
     @State private var showingValidationError = false
     @State private var validationErrorMessage = ""
     
+    init(viewModel: TaskListViewModel) {
+        self.viewModel = viewModel
+        _priority = State(initialValue: SettingsManager.shared.defaultPriority)
+    }
+    
     var body: some View {
         NavigationView {
             Form {
                 // Sezione informazioni principali
-                Section(header: Text("Informazioni Principali")) {
-                    TextField("Titolo", text: $title)
+                Section(header: Text("task.main.info".localized)) {
+                    TextField("task.title".localized, text: $title)
                         .autocapitalization(.sentences)
                     
                     ZStack(alignment: .leading) {
                         TextEditor(text: $description)
                             .frame(height: 100)
                         if description.isEmpty {
-                            Text("Descrizione (opzionale)")
+                            Text("task.description.placeholder".localized)
                                 .foregroundColor(.gray)
                                 .padding(.top, 8)
                                 .padding(.leading, 5)
@@ -47,26 +53,26 @@ struct AddTaskView: View {
                 }
                 
                 // Sezione priorità
-                Section(header: Text("Priorità")) {
-                    Picker("Priorità", selection: $priority) {
+                Section(header: Text("task.priority".localized)) {
+                    Picker("task.priority".localized, selection: $priority) {
                         ForEach(TaskPriority.allCases, id: \.self) { priority in
                             HStack {
                                 Circle()
                                     .fill(priorityColor(for: priority))
                                     .frame(width: 12, height: 12)
-                                Text(priority.title)
+                                Text("priority.\(priority)".localized)
                             }.tag(priority)
                         }
                     }
                 }
                 
                 // Sezione data di scadenza
-                Section(header: Text("Data di Scadenza")) {
-                    Toggle("Imposta scadenza", isOn: $includeDueDate)
+                Section(header: Text("task.dueDate".localized)) {
+                    Toggle("task.setDueDate".localized, isOn: $includeDueDate)
                     
                     if includeDueDate {
                         DatePicker(
-                            "Scadenza",
+                            "task.dueDate".localized,
                             selection: $dueDate,
                             in: Date()...,
                             displayedComponents: [.date]
@@ -74,23 +80,23 @@ struct AddTaskView: View {
                     }
                 }
             }
-            .navigationTitle("Nuova Attività")
+            .navigationTitle("task.new".localized)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Annulla") {
+                    Button("button.cancel".localized) {
                         dismiss()
                     }
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Salva") {
+                    Button("button.save".localized) {
                         saveTask()
                     }
                     .disabled(!isValidTask)
                 }
             }
-            .alert("Errore di Validazione", isPresented: $showingValidationError) {
-                Button("OK", role: .cancel) {}
+            .alert("validation.error".localized, isPresented: $showingValidationError) {
+                Button("button.ok".localized, role: .cancel) {}
             } message: {
                 Text(validationErrorMessage)
             }
@@ -121,7 +127,7 @@ struct AddTaskView: View {
         // Validazione del titolo
         let trimmedTitle = title.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmedTitle.isEmpty else {
-            validationErrorMessage = "Il titolo non può essere vuoto"
+            validationErrorMessage = "validation.title.empty".localized
             showingValidationError = true
             return
         }

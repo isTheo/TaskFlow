@@ -57,6 +57,7 @@ struct TaskCalendarView: View {
         .sheet(isPresented: $showingAddTask) {
             AddTaskView(viewModel: viewModel)
         }
+        .navigationTitle("tab.calendar".localized)
     }
     
     // MARK: - Componenti del Calendario
@@ -134,7 +135,7 @@ struct TaskCalendarView: View {
     
     private func taskList(for tasks: [Task]) -> some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Task per \(selectedDate.formatted(.dateTime.day().month()))")
+            Text(String(format: NSLocalizedString("task.dueDate", comment: ""), selectedDate.formatted(.dateTime.day().month())))
                 .font(.headline)
                 .padding(.top)
             
@@ -182,11 +183,11 @@ struct TaskCalendarView_Previews: PreviewProvider {
         
         // Aggiungiamo alcuni task di esempio con date diverse
         let sampleTasks = [
-            Task(title: "Meeting di progetto",
-                 description: "Discussione avanzamento",
+            Task(title: "task.example.title".localized,
+                 description: "task.example.description".localized,
                  dueDate: Date(),
                  priority: .high),
-            Task(title: "Deadline report",
+            Task(title: "task.example.title".localized,
                  dueDate: Date().addingTimeInterval(86400),
                  priority: .medium)
         ]
@@ -195,7 +196,7 @@ struct TaskCalendarView_Previews: PreviewProvider {
         
         return NavigationView {
             TaskCalendarView(viewModel: viewModel)
-                .navigationTitle("Calendario")
+                .navigationTitle("tab.calendar".localized)
         }
     }
 }

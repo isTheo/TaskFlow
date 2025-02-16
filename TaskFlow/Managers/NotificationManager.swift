@@ -8,12 +8,15 @@
 import Foundation
 import UserNotifications
 
-// `NotificationManager` gestisce tutte le operazioni relative alle notifiche locali
-// inclusa la richiesta di autorizzazioni e la pianificazione delle notifiche per i task
+// NotificationManager gestisce tutte le operazioni relative alle notifiche locali, inclusa la richiesta di autorizzazioni e la pianificazione delle notifiche per i task
 class NotificationManager {
     static let shared = NotificationManager()
     
     private init() {}
+    
+    private var settings: SettingsManager {
+        SettingsManager.shared
+    }
     
     // Richiede l'autorizzazione per inviare notifiche
     func requestAuthorization() async throws -> Bool {
@@ -25,7 +28,10 @@ class NotificationManager {
     
     // Pianifica una notifica per un task
     func scheduleTaskNotification(for task: Task) {
-        // Verifichiamo che il task abbia una data di scadenza
+        // Verifica che le notifiche siano abilitate nelle impostazioni
+        guard settings.showNotifications else { return }
+        
+        // Verifica che il task abbia una data di scadenza e non sia completato
         guard let dueDate = task.dueDate, !task.isCompleted else { return }
         
         // Crea il contenuto della notifica
@@ -40,11 +46,22 @@ class NotificationManager {
         
         content.userInfo = ["priority": task.priority.rawValue]
         
-        // Calcola il trigger per la notifica
-        // Notifica 1 ora prima della scadenza
-        let triggerDate = Calendar.current.date(byAdding: .hour, value: -1, to: dueDate)!
-        let components = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: triggerDate)
-        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
+        let notificationMinutes = settings.notificationTime
+        let triggerDate = Calendar.current.date(
+            byAdding: .minute,
+            value: -notificationMinutes,
+            to: dueDate
+        )!
+        
+        let components = Calendar.current.dateComponents(
+            [.year, .month, .day, .hour, .minute],
+            from: triggerDate
+        )
+        
+        let trigger = UNCalendarNotificationTrigger(
+            dateMatching: components,
+            repeats: false
+        )
         
         // Crea la richiesta di notifica
         let request = UNNotificationRequest(
@@ -60,6 +77,7 @@ class NotificationManager {
             }
         }
     }
+    
     
     // Rimuove la notifica per un task specifico
     func removeNotification(for task: Task) {

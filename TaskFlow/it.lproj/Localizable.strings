@@ -1,0 +1,80 @@
+/* 
+  Localizable.strings (Italian)
+  TaskFlow
+
+  Created by Matteo Orru on 16/02/25.
+  
+*/
+
+
+// MARK: - General
+"app.name" = "TaskFlow";
+"button.save" = "Salva";
+"button.cancel" = "Annulla";
+"button.done" = "Fine";
+"button.delete" = "Elimina";
+
+
+// MARK: - Tab Bar
+"tab.tasks" = "Attività";
+"tab.calendar" = "Calendario";
+"tab.stats" = "Statistiche";
+
+
+// MARK: - Tasks
+"task.new" = "Nuova Attività";
+"task.title" = "Titolo";
+"task.description" = "Descrizione";
+"task.description.placeholder" = "Descrizione (opzionale)";
+"task.priority" = "Priorità";
+"task.dueDate" = "Data Scadenza";
+"task.setDueDate" = "Imposta Scadenza";
+"task.noDueDate" = "Nessuna Scadenza";
+"task.completed" = "Completati";
+"task.pending" = "In Corso";
+
+
+// MARK: - Priority Levels
+"priority.high" = "Alta";
+"priority.medium" = "Media";
+"priority.low" = "Bassa";
+
+
+// MARK: - Settings
+"settings.title" = "Impostazioni";
+"settings.preferences" = "Preferenze Task";
+"settings.defaultPriority" = "Priorità Predefinita";
+"settings.sortBy" = "Ordina Per";
+"settings.notifications" = "Notifiche";
+"settings.enableNotifications" = "Abilita Notifiche";
+"settings.notifyBefore" = "Notifica Prima";
+"settings.appearance" = "Aspetto";
+"settings.darkMode" = "Modalità Scura";
+"settings.reset" = "Ripristina Impostazioni";
+"settings.resetConfirm" = "Vuoi davvero ripristinare tutte le impostazioni ai valori predefiniti?";
+"settings.version" = "Versione";
+
+
+// MARK: - Sort Options
+"sort.priority" = "Priorità";
+"sort.dueDate" = "Data Scadenza";
+"sort.created" = "Data Creazione";
+
+
+// MARK: - Notifications
+"notification.title" = "Task in Scadenza";
+"notification.before.15" = "15 minuti prima";
+"notification.before.30" = "30 minuti prima";
+"notification.before.60" = "1 ora prima";
+"notification.before.120" = "2 ore prima";
+"notification.before.1440" = "1 giorno prima";
+
+
+// MARK: - Validation
+"validation.error" = "Errore di Validazione";
+"validation.title.empty" = "Il titolo non può essere vuoto";
+
+
+// Sample Data
+"task.example.title" = "Task di Esempio";
+"task.example.description" = "Questo è un task di esempio per le preview";

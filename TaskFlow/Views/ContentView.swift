@@ -23,7 +23,7 @@ struct ContentView: View {
             // Tab delle attività
             NavigationView {
                 TaskListView(viewModel: viewModel)
-                    .navigationTitle("TaskFlow")
+                    .navigationTitle("app.name".localized)
                     .toolbar {
                         ToolbarItem(placement: .navigationBarTrailing) {
                             Button(action: { showingSettings = true }) {
@@ -33,27 +33,27 @@ struct ContentView: View {
                     }
             }
             .tabItem {
-                Label("Attività", systemImage: "checklist")
+                Label("tab.tasks".localized, systemImage: "checklist")
             }
             .tag(0)
             
             // Tab del calendario
             NavigationView {
                 TaskCalendarView(viewModel: viewModel)
-                    .navigationTitle("Calendario")
+                    .navigationTitle("tab.calendar".localized)
             }
             .tabItem {
-                Label("Calendario", systemImage: "calendar")
+                Label("tab.calendar".localized, systemImage: "calendar")
             }
             .tag(1)
             
             // Tab delle statistiche
             NavigationView {
                 TaskStatsView(viewModel: viewModel)
-                    .navigationTitle("Statistiche")
+                    .navigationTitle("tab.stats".localized)
             }
             .tabItem {
-                Label("Statistiche", systemImage: "chart.bar")
+                Label("tab.stats".localized, systemImage: "chart.bar")
             }
             .tag(2)
         }
@@ -67,41 +67,14 @@ struct ContentView: View {
             if ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1" {
                 //task di esempio per le preview
                 let sampleTask = Task(
-                    title: "Task di Esempio",
-                    description: "Questo è un task di esempio",
+                    title: "task.example.title".localized,
+                    description: "task.example.description".localized,
                     dueDate: Date(),
                     priority: .medium
                 )
                 viewModel.addTask(sampleTask)
             }
 #endif
-        }
-    }
-}
-
-
-
-
-// View per le impostazioni
-struct SettingsView: View {
-    @Environment(\.dismiss) private var dismiss
-    
-    var body: some View {
-        NavigationView {
-            List {
-                Section(header: Text("Generali")) {
-                    Text("Impostazioni - Prossimamente")
-                        .foregroundColor(.secondary)
-                }
-            }
-            .navigationTitle("Impostazioni")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Fine") {
-                        dismiss()
-                    }
-                }
-            }
         }
     }
 }
