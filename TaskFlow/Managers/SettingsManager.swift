@@ -19,11 +19,13 @@ class SettingsManager: ObservableObject {
         }
     }
     
+    
     @Published var showNotifications: Bool {
         didSet {
             defaults.set(showNotifications, forKey: Keys.showNotifications.rawValue)
         }
     }
+    
     
     @Published var notificationTime: Int {
         didSet {
@@ -31,17 +33,28 @@ class SettingsManager: ObservableObject {
         }
     }
     
+    
     @Published var useDarkMode: Bool {
         didSet {
             defaults.set(useDarkMode, forKey: Keys.useDarkMode.rawValue)
         }
     }
     
+    
     @Published var sortBy: SortOption {
         didSet {
             defaults.set(sortBy.rawValue, forKey: Keys.sortBy.rawValue)
         }
     }
+    
+    
+    @Published var language: Language {
+        didSet {
+            defaults.set(language.rawValue, forKey: Keys.language.rawValue)
+            updateAppLanguage()
+        }
+    }
+    
     
     // MARK: - Enums
     enum Keys: String {
@@ -50,6 +63,7 @@ class SettingsManager: ObservableObject {
         case notificationTime
         case useDarkMode
         case sortBy
+        case language
     }
     
     enum SortOption: Int, CaseIterable {
@@ -59,16 +73,33 @@ class SettingsManager: ObservableObject {
         
         var title: String {
             switch self {
-            case .priority: return "Priorità"
-            case .dueDate: return "Data Scadenza"
-            case .created: return "Data Creazione"
+            case .priority: return "sort.priority".localized
+            case .dueDate: return "sort.dueDate".localized
+            case .created: return "sort.created".localized
             }
         }
     }
     
+    
+    enum Language: String, CaseIterable {
+        case system
+        case english = "en"
+        case italian = "it"
+        
+        var title: String {
+            switch self {
+            case .system: return "language.system".localized
+            case .english: return "language.english".localized
+            case .italian: return "language.italian".localized
+            }
+        }
+    }
+    
+    
     // MARK: - Initialization
     private init() {
         // Carica i valori salvati o usa i default
+        self.language = Language(rawValue: defaults.string(forKey: Keys.language.rawValue) ?? "system") ?? .system
         self.defaultPriority = TaskPriority(rawValue: Int16(defaults.integer(forKey: Keys.defaultPriority.rawValue))) ?? .medium
         self.showNotifications = defaults.bool(forKey: Keys.showNotifications.rawValue)
         self.notificationTime = defaults.integer(forKey: Keys.notificationTime.rawValue)
@@ -82,6 +113,7 @@ class SettingsManager: ObservableObject {
         }
     }
     
+    
     // MARK: - Helper Methods
     private func setDefaultValues() {
         defaultPriority = .medium
@@ -89,9 +121,26 @@ class SettingsManager: ObservableObject {
         notificationTime = 60 // minuti prima della scadenza
         useDarkMode = false
         sortBy = .priority
+        language = .system
     }
+    
     
     func resetToDefaults() {
         setDefaultValues()
     }
+    
+    
+    private func updateAppLanguage() {
+        if language != .system {
+            UserDefaults.standard.set([language.rawValue], forKey: "AppleLanguages")
+        } else {
+            UserDefaults.standard.removeObject(forKey: "AppleLanguages")
+        }
+    }
+    
+    
+    
+    
+    
+    
 }

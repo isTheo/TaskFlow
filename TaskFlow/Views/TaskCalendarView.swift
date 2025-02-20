@@ -135,7 +135,7 @@ struct TaskCalendarView: View {
     
     private func taskList(for tasks: [Task]) -> some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text(String(format: NSLocalizedString("task.dueDate", comment: ""), selectedDate.formatted(.dateTime.day().month())))
+            Text(String(format: NSLocalizedString("task.dueDate".localized, comment: ""), selectedDate.formatted(.dateTime.day().month())))
                 .font(.headline)
                 .padding(.top)
             

@@ -23,9 +23,9 @@ struct TaskListView: View {
         
         var title: String {
             switch self {
-            case .all: return "All"
-            case .pending: return "Pending"
-            case .completed: return "Completed"
+            case .all: return "filter.all".localized
+            case .pending: return "filter.pending".localized
+            case .completed: return "filter.completed".localized
             }
         }
     }
@@ -33,7 +33,7 @@ struct TaskListView: View {
     var body: some View {
         List {
             // Picker per il filtro
-            Picker("Filtra", selection: $selectedFilter) {
+            Picker("filter.title".localized, selection: $selectedFilter) {
                 Text(TaskFilter.all.title).tag(TaskFilter.all)
                 Text(TaskFilter.pending.title).tag(TaskFilter.pending)
                 Text(TaskFilter.completed.title).tag(TaskFilter.completed)
@@ -43,7 +43,7 @@ struct TaskListView: View {
             
             // Sezione task con scadenza oggi
             if !filteredTasksDueToday.isEmpty {
-                Section(header: Text("In Scadenza Oggi")) {
+                Section(header: Text("task.due.today".localized)) {
                     ForEach(filteredTasksDueToday) { task in
                         TaskRowView(task: task, viewModel: viewModel)
                     }
@@ -51,9 +51,9 @@ struct TaskListView: View {
             }
             
             // Sezione task rimanenti
-            Section(header: Text("Attività")) {
+            Section(header: Text("task.section.title".localized)) {
                 if filteredTasks.isEmpty {
-                    Text("Nessuna attività")
+                    Text("task.empty.message".localized)
                         .foregroundColor(.secondary)
                         .italic()
                 } else {
@@ -64,7 +64,7 @@ struct TaskListView: View {
                 }
             }
         }
-        .navigationTitle("TaskFlow")
+        .navigationTitle("app.name".localized)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: { showingAddTask = true }) {
@@ -85,7 +85,7 @@ struct TaskListView: View {
     private var filteredTasks: [Task] {
         switch selectedFilter {
         case .all:
-            return viewModel.tasks
+            return viewModel.pendingTasks
         case .pending:
             return viewModel.pendingTasks
         case .completed:
@@ -122,17 +122,17 @@ struct TaskListView_Previews: PreviewProvider {
         let viewModel = TaskListViewModel(context: PersistenceController.preview.viewContext)
         
         let sampleTasks = [
-            Task(title: "Completare il progetto TaskFlow",
-                 description: "Implementare Core Data e CloudKit",
+            Task(title: "task.example.project".localized,
+                 description: "task.example.project.description".localized,
                  dueDate: Date().addingTimeInterval(86400),
                  priority: .high),
             
-            Task(title: "Fare la spesa",
-                 description: "Comprare frutta e verdura",
+            Task(title: "task.example.shopping".localized,
+                 description: "task.example.shopping.description".localized,
                  dueDate: Date(),
                  priority: .medium),
             
-            Task(title: "Leggere documentazione SwiftUI",
+            Task(title: "task.example.reading".localized,
                  isCompleted: true, priority: .low)
         ]
         

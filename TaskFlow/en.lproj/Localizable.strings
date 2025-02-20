@@ -32,11 +32,48 @@
 "task.noDueDate" = "No Due Date";
 "task.completed" = "Completed";
 "task.pending" = "Pending";
+"task.due.today" = "Due Today";
+"task.section.title" = "Tasks";
+"task.empty.message" = "No tasks";
+"task.mark.complete" = "Mark as complete";
+"task.mark.incomplete" = "Mark as incomplete";
+"task.priority.level" = "Priority: %@";
+"task.expand" = "Show details";
+"task.collapse" = "Hide details";
+"task.due.date" = "Due date: %@";
+"task.edit.title" = "Edit Task";
+"task.edit.details" = "Details";
+"task.edit.datetime" = "Date and Time";
+"task.edit.repeat" = "Repeat";
+"task.url" = "URL (optional)";
+"task.repeat" = "Repeat";
+
+
+// MARK: - Repeat option
+"repeat.option.0" = "Never";
+"repeat.option.1" = "Hourly";
+"repeat.option.2" = "Daily";
+"repeat.option.3" = "Weekdays";
+"repeat.option.4" = "Weekends";
+"repeat.option.5" = "Weekly";
+"repeat.option.6" = "Monthly";
+"repeat.option.7" = "Every 3 Months";
+"repeat.option.8" = "Every 6 Months";
+"repeat.option.9" = "Yearly";
+
+
+// MARK: - Filter
+"filter.all" = "All";
+"filter.pending" = "Pending";
+"filter.completed" = "Completed";
+"filter.title" = "Filter";
+
 
 // MARK: - Priority Levels
 "priority.high" = "High";
 "priority.medium" = "Medium";
 "priority.low" = "Low";
+
 
 // MARK: - Settings
 "settings.title" = "Settings";
@@ -51,11 +88,20 @@
 "settings.reset" = "Reset Settings";
 "settings.resetConfirm" = "Do you really want to reset all settings to default values?";
 "settings.version" = "Version";
+"settings.language" = "Language";
+
+
+// MARK: - Language
+"language.english" = "English";
+"language.italian" = "Italian";
+"language.system" = "System Default";
+
 
 // MARK: - Sort Options
 "sort.priority" = "Priority";
 "sort.dueDate" = "Due Date";
 "sort.created" = "Creation Date";
+
 
 // MARK: - Notifications
 "notification.title" = "Task Due";
@@ -64,12 +110,55 @@
 "notification.before.60" = "1 hour before";
 "notification.before.120" = "2 hours before";
 "notification.before.1440" = "1 day before";
+"notification.task.due" = "Task Due";
+"notification.error.scheduling" = "Error scheduling notification: %@";
+"notification.action.complete" = "Mark as Complete";
+"notification.action.postpone" = "Postpone 1 hour";
+
 
 // MARK: - Validation
 "validation.error" = "Validation Error";
 "validation.title.empty" = "Title cannot be empty";
 
 
-// Sample Data
+// MARK: - Time Frames
+"timeframe.week" = "Week";
+"timeframe.month" = "Month";
+"timeframe.year" = "Year";
+"timeframe.select" = "Period";
+
+
+// MARK: - Stats Cards
+"stats.title" = "Statistics";
+"stats.overview" = "Overview";
+"stats.total" = "Total";
+"stats.completed" = "Completed";
+"stats.in.progress" = "In Progress";
+"stats.priority.distribution" = "Priority Distribution";
+"stats.completion.rate" = "Completion Rate";
+"stats.daily.productivity" = "Daily Productivity";
+"stats.tasks.per.day" = "Tasks completed per day";
+"stats.completed.percentage" = "Completed";
+
+
+// MARK: - Samples
 "task.example.title" = "Example task";
 "task.example.description" = "This is an example task for previews";
+"task.example.project" = "Complete TaskFlow Project";
+"task.example.project.description" = "Implement Core Data and CloudKit";
+"task.example.shopping" = "Go Shopping";
+"task.example.shopping.description" = "Buy fruits and vegetables";
+"task.example.reading" = "Read SwiftUI Documentation";
+"task.example.high" = "High Priority Task";
+"task.example.medium" = "Medium Priority Task";
+"task.example.low" = "Low Priority Task";
+"task.example.completed" = "Completed Task";
+
+
+
+
+// MARK: - Errors
+"error.coredata.loading" = "Error loading Core Data: %@";
+
+
+

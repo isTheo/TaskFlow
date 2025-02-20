@@ -71,6 +71,7 @@ class TaskListViewModel: ObservableObject {
         scheduleNotificationsForNewTask(task)
     }
     
+    
     func updateTask(_ task: Task) {
         let request = TaskEntity.fetchRequest()
         request.predicate = NSPredicate(format: "id == %@", task.id as CVarArg)
@@ -89,6 +90,7 @@ class TaskListViewModel: ObservableObject {
         }
     }
     
+    
     func deleteTask(_ task: Task) {
         let request = TaskEntity.fetchRequest()
         request.predicate = NSPredicate(format: "id == %@", task.id as CVarArg)
@@ -105,17 +107,31 @@ class TaskListViewModel: ObservableObject {
         }
     }
     
+    
     func toggleTaskCompletion(_ task: Task) {
         var updatedTask = task
         updatedTask.isCompleted.toggle()
-        updateTask(updatedTask)
         
-        if updatedTask.isCompleted {
-            removeNotificationsForTask(updatedTask)
-        } else {
-            scheduleNotificationsForNewTask(updatedTask)
+        // Aggiorniamo immediatamente l'array locale dei task
+        if let index = tasks.firstIndex(where: { $0.id == task.id }) {
+            tasks[index] = updatedTask
+        }
+        
+        // Salviamo in Core Data
+        let request = TaskEntity.fetchRequest()
+        request.predicate = NSPredicate(format: "id == %@", task.id as CVarArg)
+        
+        do {
+            let results = try viewContext.fetch(request)
+            if let existingEntity = results.first {
+                updatedTask.updateEntity(existingEntity)
+                try viewContext.save()
+            }
+        } catch {
+            print("Errore nell'aggiornamento del task: \(error.localizedDescription)")
         }
     }
+    
     
     // MARK: - Helper Methods
     private func saveContext() {
@@ -144,6 +160,7 @@ class TaskListViewModel: ObservableObject {
         }
     }
     
+    
     // MARK: - Error Handling
     enum TaskError: LocalizedError {
         case fetchError(String)
@@ -169,18 +186,19 @@ class TaskListViewModel: ObservableObject {
     }
 }
 
+
 // MARK: - Notification Management
 extension TaskListViewModel {
-    private func scheduleNotificationsForNewTask(_ task: Task) {
+    private func scheduleNotificationsForNewTask(_ task: Task, earlyReminder: EarlyReminder? = nil) {
         _Concurrency.Task {
             let status = await NotificationManager.shared.checkNotificationStatus()
             if status == .authorized {
-                NotificationManager.shared.scheduleTaskNotification(for: task)
+                NotificationManager.shared.scheduleTaskNotification(for: task, earlyReminder: earlyReminder)
             } else if status == .notDetermined {
                 do {
                     let granted = try await NotificationManager.shared.requestAuthorization()
                     if granted {
-                        NotificationManager.shared.scheduleTaskNotification(for: task)
+                        NotificationManager.shared.scheduleTaskNotification(for: task, earlyReminder: earlyReminder)
                     }
                 } catch {
                     print("Errore nella richiesta di autorizzazione: \(error.localizedDescription)")
@@ -190,11 +208,11 @@ extension TaskListViewModel {
     }
     
     
-    private func updateNotificationsForTask(_ task: Task) {
+     func updateNotificationsForTask(_ task: Task, earlyReminder: EarlyReminder? = nil) {
         _Concurrency.Task {
             let status = await NotificationManager.shared.checkNotificationStatus()
             if status == .authorized {
-                NotificationManager.shared.updateNotification(for: task)
+                NotificationManager.shared.updateNotification(for: task, earlyReminder: earlyReminder)
             }
         }
     }

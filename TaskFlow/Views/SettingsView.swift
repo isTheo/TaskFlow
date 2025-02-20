@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+
 struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @StateObject private var settings = SettingsManager.shared
@@ -55,6 +56,15 @@ struct SettingsView: View {
                 // MARK: - Aspetto
                 Section(header: Text("settings.appearance".localized)) {
                     Toggle("settings.darkMode".localized, isOn: $settings.useDarkMode)
+                }
+                
+                
+                Section(header: Text("settings.language".localized)) {
+                    Picker("settings.language".localized, selection: $settings.language) {
+                        ForEach(SettingsManager.Language.allCases, id: \.self) { language in
+                            Text(language.title).tag(language)
+                        }
+                    }
                 }
                 
                 

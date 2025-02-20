@@ -14,18 +14,22 @@ struct TaskStatsView: View {
     
     // Periodo di tempo per le statistiche
     enum TimeFrame: String, CaseIterable {
-        case week = "Settimana"
-        case month = "Mese"
-        case year = "Anno"
+        case week = "timeframe.week"
+        case month = "timeframe.month"
+        case year = "timeframe.year"
+        
+        var title: String {
+            self.rawValue.localized
+        }
     }
     
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
                 // Selettore del periodo temporale
-                Picker("Periodo", selection: $selectedTimeFrame) {
+                Picker("timeframe.select".localized, selection: $selectedTimeFrame) {
                     ForEach(TimeFrame.allCases, id: \.self) { timeFrame in
-                        Text(timeFrame.rawValue).tag(timeFrame)
+                        Text(timeFrame.title).tag(timeFrame)
                     }
                 }
                 .pickerStyle(SegmentedPickerStyle())
@@ -50,24 +54,24 @@ struct TaskStatsView: View {
     // MARK: - Componenti Statistiche
     
     private var generalStatsCard: some View {
-        StatCard(title: "Panoramica") {
+        StatCard(title: "stats.overview".localized) {
             HStack {
                 StatBox(
-                    title: "Totali",
+                    title: "stats.total".localized,
                     value: "\(viewModel.tasks.count)",
                     icon: "list.bullet",
                     color: .blue
                 )
                 
                 StatBox(
-                    title: "Completati",
+                    title: "stats.completed".localized,
                     value: "\(viewModel.completedTasks.count)",
                     icon: "checkmark.circle",
                     color: .green
                 )
                 
                 StatBox(
-                    title: "In Corso",
+                    title: "stats.in.progress".localized,
                     value: "\(viewModel.pendingTasks.count)",
                     icon: "clock",
                     color: .orange
@@ -77,24 +81,24 @@ struct TaskStatsView: View {
     }
     
     private var priorityStatsCard: some View {
-        StatCard(title: "Distribuzione Priorità") {
+        StatCard(title: "stats.priority.distribution".localized) {
             VStack(spacing: 12) {
                 PriorityBar(
-                    priority: "Alta",
+                    priority: "priority.high".localized,
                     count: tasksCount(for: .high),
                     total: viewModel.tasks.count,
                     color: .red
                 )
                 
                 PriorityBar(
-                    priority: "Media",
+                    priority: "priority.medium".localized,
                     count: tasksCount(for: .medium),
                     total: viewModel.tasks.count,
                     color: .yellow
                 )
                 
                 PriorityBar(
-                    priority: "Bassa",
+                    priority: "priority.low".localized,
                     count: tasksCount(for: .low),
                     total: viewModel.tasks.count,
                     color: .green
@@ -104,7 +108,7 @@ struct TaskStatsView: View {
     }
     
     private var completionChartCard: some View {
-        StatCard(title: "Tasso di Completamento") {
+        StatCard(title: "stats.completion.rate".localized) {
             let completionRate = calculateCompletionRate()
             
             CircularProgressView(progress: completionRate)
@@ -113,7 +117,7 @@ struct TaskStatsView: View {
     }
     
     private var productivityCard: some View {
-        StatCard(title: "Produttività Giornaliera") {
+        StatCard(title: "stats.daily.productivity".localized) {
             let productivity = calculateDailyProductivity()
             
             HStack {
@@ -121,7 +125,7 @@ struct TaskStatsView: View {
                     Text("\(String(format: "%.1f", productivity))")
                         .font(.title)
                         .fontWeight(.bold)
-                    Text("Task completati al giorno")
+                    Text("stats.tasks.per.day".localized)
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
@@ -134,6 +138,7 @@ struct TaskStatsView: View {
             }
         }
     }
+    
     
     // MARK: - Helper Methods
     
@@ -277,7 +282,7 @@ struct CircularProgressView: View {
                 Text("\(Int(progress * 100))%")
                     .font(.title)
                     .fontWeight(.bold)
-                Text("Completati")
+                Text("stats.completed.percentage".localized)
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
@@ -291,17 +296,17 @@ struct TaskStatsView_Previews: PreviewProvider {
         let viewModel = TaskListViewModel(context: PersistenceController.preview.viewContext)
         
         let sampleTasks = [
-            Task(title: "Task Alta Priorità", priority: .high),
-            Task(title: "Task Media Priorità", priority: .medium),
-            Task(title: "Task Bassa Priorità", priority: .low),
-            Task(title: "Task Completato", isCompleted: true, priority: .medium)
+            Task(title: "task.example.high".localized, priority: .high),
+            Task(title: "task.example.medium".localized, priority: .medium),
+            Task(title: "task.example.low".localized, priority: .low),
+            Task(title: "task.example.completed".localized, isCompleted: true, priority: .medium)
         ]
         
         sampleTasks.forEach { viewModel.addTask($0) }
         
         return NavigationView {
             TaskStatsView(viewModel: viewModel)
-                .navigationTitle("Statistiche")
+                .navigationTitle("stats.title".localized)
         }
     }
 }

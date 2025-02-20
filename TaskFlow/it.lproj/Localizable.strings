@@ -32,6 +32,41 @@
 "task.noDueDate" = "Nessuna Scadenza";
 "task.completed" = "Completati";
 "task.pending" = "In Corso";
+"task.due.today" = "In Scadenza Oggi";
+"task.section.title" = "Attività";
+"task.empty.message" = "Nessuna attività";
+"task.mark.complete" = "Segna come completato";
+"task.mark.incomplete" = "Segna come non completato";
+"task.priority.level" = "Priorità: %@";
+"task.expand" = "Mostra dettagli";
+"task.collapse" = "Nascondi dettagli";
+"task.due.date" = "Data scadenza: %@";
+"task.edit.title" = "Modifica Promemoria";
+"task.edit.details" = "Dettagli";
+"task.edit.datetime" = "Data e Ora";
+"task.edit.repeat" = "Ripeti";
+"task.url" = "URL (opzionale)";
+"task.repeat" = "Ripeti";
+
+
+// MARK: - Repeat options
+"repeat.option.0" = "Mai";
+"repeat.option.1" = "Ogni ora";
+"repeat.option.2" = "Ogni giorno";
+"repeat.option.3" = "Giorni feriali";
+"repeat.option.4" = "Fine settimana";
+"repeat.option.5" = "Ogni settimana";
+"repeat.option.6" = "Ogni mese";
+"repeat.option.7" = "Ogni 3 mesi";
+"repeat.option.8" = "Ogni 6 mesi";
+"repeat.option.9" = "Ogni anno";
+
+
+// MARK: - Filter
+"filter.all" = "Tutti";
+"filter.pending" = "Da Fare";
+"filter.completed" = "Completati";
+"filter.title" = "Filtra";
 
 
 // MARK: - Priority Levels
@@ -53,6 +88,13 @@
 "settings.reset" = "Ripristina Impostazioni";
 "settings.resetConfirm" = "Vuoi davvero ripristinare tutte le impostazioni ai valori predefiniti?";
 "settings.version" = "Versione";
+"settings.language" = "Lingua";
+
+
+// MARK: - Language
+"settings.language" = "Lingua";
+"language.english" = "Inglese";
+"language.italian" = "Italiano";
 
 
 // MARK: - Sort Options
@@ -68,6 +110,10 @@
 "notification.before.60" = "1 ora prima";
 "notification.before.120" = "2 ore prima";
 "notification.before.1440" = "1 giorno prima";
+"notification.task.due" = "Task in Scadenza";
+"notification.error.scheduling" = "Errore nella pianificazione della notifica: %@";
+"notification.action.complete" = "Segna come Completato";
+"notification.action.postpone" = "Posticipa di 1 ora";
 
 
 // MARK: - Validation
@@ -75,6 +121,39 @@
 "validation.title.empty" = "Il titolo non può essere vuoto";
 
 
-// Sample Data
+// MARK: - Time Frames
+"timeframe.week" = "Settimana";
+"timeframe.month" = "Mese";
+"timeframe.year" = "Anno";
+"timeframe.select" = "Periodo";
+
+
+// MARK: - Stats Cards
+"stats.title" = "Statistiche";
+"stats.overview" = "Panoramica";
+"stats.total" = "Totali";
+"stats.completed" = "Completati";
+"stats.in.progress" = "In Corso";
+"stats.priority.distribution" = "Distribuzione Priorità";
+"stats.completion.rate" = "Tasso di Completamento";
+"stats.daily.productivity" = "Produttività Giornaliera";
+"stats.tasks.per.day" = "Task completati al giorno";
+"stats.completed.percentage" = "Completati";
+
+
+// MARK: - Samples
 "task.example.title" = "Task di Esempio";
 "task.example.description" = "Questo è un task di esempio per le preview";
+"task.example.project" = "Completare il progetto TaskFlow";
+"task.example.project.description" = "Implementare Core Data e CloudKit";
+"task.example.shopping" = "Fare la spesa";
+"task.example.shopping.description" = "Comprare frutta e verdura";
+"task.example.reading" = "Leggere documentazione SwiftUI";
+"task.example.high" = "Task Alta Priorità";
+"task.example.medium" = "Task Media Priorità";
+"task.example.low" = "Task Bassa Priorità";
+"task.example.completed" = "Task Completato";
+
+
+// MARK: - Errors
+"error.coredata.loading" = "Errore nel caricamento di Core Data: %@";

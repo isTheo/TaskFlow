@@ -16,9 +16,9 @@ enum TaskPriority: Int16, CaseIterable, Codable {
     
     var title: String {
         switch self {
-        case .low: return "Low"
-        case .medium: return "Medium"
-        case .high: return "High"
+        case .low: return "priority.low".localized
+        case .medium: return "priority.medium".localized
+        case .high: return "priority.high".localized
         }
     }
     

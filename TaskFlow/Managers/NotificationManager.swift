@@ -2,41 +2,34 @@
 //  NotificationManager.swift
 //  TaskFlow
 //
-//  Created by Matteo Orru on 12/02/25.
+//  Created by Matteo Orru on 13/02/25.
 //
 
 import Foundation
 import UserNotifications
 
-// NotificationManager gestisce tutte le operazioni relative alle notifiche locali, inclusa la richiesta di autorizzazioni e la pianificazione delle notifiche per i task
 class NotificationManager {
     static let shared = NotificationManager()
-    
     private init() {}
     
     private var settings: SettingsManager {
         SettingsManager.shared
     }
     
-    // Richiede l'autorizzazione per inviare notifiche
+    
     func requestAuthorization() async throws -> Bool {
         let center = UNUserNotificationCenter.current()
         let options: UNAuthorizationOptions = [.alert, .sound, .badge]
-        
         return try await center.requestAuthorization(options: options)
     }
     
-    // Pianifica una notifica per un task
-    func scheduleTaskNotification(for task: Task) {
-        // Verifica che le notifiche siano abilitate nelle impostazioni
+    
+    func scheduleTaskNotification(for task: Task, earlyReminder: EarlyReminder? = nil) {
         guard settings.showNotifications else { return }
-        
-        // Verifica che il task abbia una data di scadenza e non sia completato
         guard let dueDate = task.dueDate, !task.isCompleted else { return }
         
-        // Crea il contenuto della notifica
         let content = UNMutableNotificationContent()
-        content.title = "Task in Scadenza"
+        content.title = "notification.task.due".localized
         content.body = task.title
         content.sound = .default
         
@@ -44,14 +37,20 @@ class NotificationManager {
             content.subtitle = description
         }
         
-        content.userInfo = ["priority": task.priority.rawValue]
+        content.userInfo = [
+            "taskId": task.id.uuidString,
+            "priority": task.priority.rawValue
+        ]
         
-        let notificationMinutes = settings.notificationTime
+        
+        // Calcola la data di notifica in base all'early reminder
+        let notificationMinutes = earlyReminder?.rawValue ?? settings.notificationTime
         let triggerDate = Calendar.current.date(
             byAdding: .minute,
             value: -notificationMinutes,
             to: dueDate
         )!
+        
         
         let components = Calendar.current.dateComponents(
             [.year, .month, .day, .hour, .minute],
@@ -63,65 +62,79 @@ class NotificationManager {
             repeats: false
         )
         
-        // Crea la richiesta di notifica
+        
+        let identifier = earlyReminder != nil ?
+            "task-\(task.id.uuidString)-early-\(notificationMinutes)" :
+            "task-\(task.id.uuidString)"
+        
+        
         let request = UNNotificationRequest(
-            identifier: "task-\(task.id.uuidString)",
+            identifier: identifier,
             content: content,
             trigger: trigger
         )
         
-        // Pianifica la notifica
         UNUserNotificationCenter.current().add(request) { error in
             if let error = error {
-                print("Errore nella pianificazione della notifica: \(error.localizedDescription)")
+                print("notification.error.scheduling".localized(with: error.localizedDescription))
             }
         }
     }
     
     
-    // Rimuove la notifica per un task specifico
+    func scheduleNotificationWithReminder(for task: Task, earlyReminder: EarlyReminder? = nil) {
+        // Modifichiamo la guard per usare solo quello che ci serve
+        guard task.dueDate != nil, !task.isCompleted else { return }
+        
+        _Concurrency.Task {
+            let status = await checkNotificationStatus()
+            if status == .authorized {
+                updateNotification(for: task, earlyReminder: earlyReminder)
+            }
+        }
+    }
+    
+    
     func removeNotification(for task: Task) {
-        let identifier = "task-\(task.id.uuidString)"
-        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [identifier])
+        // Rimuove tutte le notifiche associate al task
+        let baseIdentifier = "task-\(task.id.uuidString)"
+        let identifiers = [baseIdentifier] + EarlyReminder.allCases.map {
+            "\(baseIdentifier)-early-\($0.rawValue)"
+        }
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: identifiers)
     }
     
-    // Rimuove tutte le notifiche pianificate
-    func removeAllNotifications() {
-        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
-    }
     
-    // Aggiorna la notifica per un task
-    func updateNotification(for task: Task) {
+    
+    func updateNotification(for task: Task, earlyReminder: EarlyReminder? = nil) {
         removeNotification(for: task)
-        scheduleTaskNotification(for: task)
+        scheduleTaskNotification(for: task, earlyReminder: earlyReminder)
     }
     
-    // Verifica lo stato delle autorizzazioni per le notifiche
+    
     func checkNotificationStatus() async -> UNAuthorizationStatus {
         await UNUserNotificationCenter.current().notificationSettings().authorizationStatus
     }
+    
+    
 }
 
 
-// MARK: - Notification Categories
+
 extension NotificationManager {
-    // Configura le categorie di notifica con azioni
     func configureNotificationCategories() {
-        // Azione per completare il task
         let completeAction = UNNotificationAction(
             identifier: "COMPLETE_TASK",
-            title: "Segna come Completato",
+            title: "notification.action.complete".localized,
             options: .foreground
         )
         
-        // Azione per posticipare
         let postponeAction = UNNotificationAction(
             identifier: "POSTPONE_TASK",
-            title: "Posticipa di 1 ora",
+            title: "notification.action.postpone".localized,
             options: .foreground
         )
         
-        // Categoria per le notifiche dei task
         let category = UNNotificationCategory(
             identifier: "TASK_REMINDER",
             actions: [completeAction, postponeAction],
@@ -129,7 +142,6 @@ extension NotificationManager {
             options: []
         )
         
-        // Registra la categoria
         UNUserNotificationCenter.current().setNotificationCategories([category])
     }
 }

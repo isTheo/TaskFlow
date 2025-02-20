@@ -75,8 +75,8 @@ class PersistenceController {
         // datio di esempio per le preview
         let sampleTask = TaskEntity(context: viewContext)
         sampleTask.id = UUID()
-        sampleTask.title = "Task di Esempio"
-        sampleTask.taskDescription = "Questo è un task di esempio per le preview"
+        sampleTask.title = "task.example.title".localized
+        sampleTask.taskDescription = "task.example.description".localized
         sampleTask.dueDate = Date()
         sampleTask.priority = TaskPriority.medium.rawValue
         sampleTask.isCompleted = false
@@ -96,7 +96,7 @@ class PersistenceController {
         
         container.loadPersistentStores { description, error in
             if let error = error {
-                fatalError("Errore nel caricamento di Core Data: \(error.localizedDescription)")
+                fatalError("error.coredata.loading".localized(with: error.localizedDescription))
             }
         }
     }
