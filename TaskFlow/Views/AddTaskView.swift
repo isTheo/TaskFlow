@@ -36,7 +36,7 @@ struct AddTaskView: View {
         NavigationView {
             Form {
                 // Sezione informazioni principali
-                Section(header: Text("task.main.info".localized)) {
+                Section(header: Text("".localized)) {
                     TextField("task.title".localized, text: $title)
                         .autocapitalization(.sentences)
                     

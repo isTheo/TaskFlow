@@ -18,7 +18,7 @@ struct SettingsView: View {
         NavigationView {
             Form {
                 // MARK: - Preferenze Task
-                Section(header: Text("settings.preferences.localized")) {
+                Section(header: Text("settings.preferences".localized)) {
                     Picker("settings.defaultPriority".localized, selection: $settings.defaultPriority) {
                         ForEach(TaskPriority.allCases, id: \.self) { priority in
                             HStack {

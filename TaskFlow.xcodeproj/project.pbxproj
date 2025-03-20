@@ -30,6 +30,11 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		953764402D8C81D500607694 /* screenshots */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = screenshots;
+			sourceTree = "<group>";
+		};
 		95EC6C162D5D03B900349473 /* TaskFlow */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = TaskFlow;
@@ -75,6 +80,7 @@
 		95EC6C0B2D5D03B900349473 = {
 			isa = PBXGroup;
 			children = (
+				953764402D8C81D500607694 /* screenshots */,
 				95EC6C162D5D03B900349473 /* TaskFlow */,
 				95EC6C272D5D03BA00349473 /* TaskFlowTests */,
 				95EC6C312D5D03BA00349473 /* TaskFlowUITests */,
@@ -108,6 +114,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				953764402D8C81D500607694 /* screenshots */,
 				95EC6C162D5D03B900349473 /* TaskFlow */,
 			);
 			name = TaskFlow;

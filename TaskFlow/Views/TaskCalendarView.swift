@@ -16,14 +16,14 @@ struct TaskCalendarView: View {
     private let calendar = Calendar(identifier: .gregorian)
     private let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "it_IT")
+        formatter.locale = Locale(identifier: "tab.calendar".localized)
         formatter.dateFormat = "MMMM yyyy"
         return formatter
     }()
     
     private let weekDayFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "it_IT")
+        formatter.locale = Locale(identifier: "tab.calendar".localized)
         formatter.dateFormat = "EEE"
         return formatter
     }()

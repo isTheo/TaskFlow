@@ -99,7 +99,7 @@ struct TaskEditView: View {
                     }
                 }
                 
-                // Sezione eliminazione
+                // Sezione eliminazione task
                 Section {
                     Button(role: .destructive) {
                         viewModel.deleteTask(task)
